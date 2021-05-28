@@ -1,0 +1,48 @@
+dagTimeout: 3600s
+placement:
+  managedCluster:
+    clusterName: 
+    config:
+      gceClusterConfig:
+        zoneUri: us-central1-a
+        #subnetworkUri: Talvez seja necessário colocar a URI da subnet para que o código execute
+        metadata:
+          gcs-connector-version: "2.2.0"
+          bigquery-connector-version: "1.2.0"
+          spark-bigquery-connector-version: "0.19.1"
+      masterConfig:
+        machineTypeUri: n1-standard-2
+        diskConfig:
+          numLocalSsds: 1
+      softwareConfig:
+        imageVersion: "1.5"
+        properties: 
+          spark:spark.default.parallelism: "12"
+          spark:spark.sql.shuffle.partitions: "12"
+      workerConfig:
+        machineTypeUri: n1-standard-2
+        numInstances: 2
+        diskConfig:
+          numLocalSsds: 1
+      initializationActions:
+        executableFile: "gs://goog-dataproc-initialization-actions-us-central1/connectors/connectors.sh"
+jobs:
+  - stepId: spark-job
+    pysparkJob:
+      args:
+        - input_uri
+        - customer_file
+      mainPythonFileUri:
+parameters:
+  - name: CLUSTER_NAME
+    fields:
+    - placement.managedCluster.clusterName
+  - name: MAIN_PY
+    fields:
+    - jobs['spark-job'].pysparkJob.mainPythonFileUri
+  - name: WORDS_FILE
+    fields:
+    - jobs['spark-job'].pysparkJob.args[0]
+  - name: CUSTOMER_FILE
+    fields:
+    - jobs['spark-job'].pysparkJob.args[1]
