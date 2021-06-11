@@ -1,72 +1,73 @@
-### Teste para vaga de Engenheiro de dados na Luiza Labs
+### Data Engineering Challenge in GCP
 
-#### Solução
+#### Solution
 
-A solução foi desenvolvida com base na plataforma [Google Cloud Platform](https://cloud.google.com/).
+The solution was developed based on the platform [Google Cloud Platform](https://cloud.google.com/).
 
-#### Descrição das pastas
+#### Description of folders
 
 - __terraform__:
-Contém os arquivos de terraform responsáveis por criar todos os recursos do GCP.
+Contains the terraform files responsible for creating all features of the GCP.
 
 - __dataproc__:
-Contém arquivos relacionados ao modelo de fluxo de trabalho do Dataproc.
+Contains files related to the Dataproc workflow template.
 
 - __composer__:
-Contém o arquivo DAG.
+Contains the DAG file.
 
 - __scripts__:
-Contém scripts de bash de utilitários.
+Contains utility bash scripts.
 
-#### Instruções para executar o código
+#### Instructions for running the code
 
-__Note__: As etapas descritas aqui foram testadas no Ubuntu 20.04.
+__Note__: The steps described here were tested in the Ubuntu 20.04.
 
-###### Configuração GCP
+###### GCP Config
 
-1. Crie um novo projeto no GCP e anote seu ID.
-2. Na pasta raiz, execute:
+1. Create a new project in GCP and note its ID.
+2. From the root folder, run:
 
 ```bash
 ./replace_project_id.sh YOUR_PROJECT_ID
 ```
-isso substituirá uma string de espaço reservado em todos os arquivos onde o ID do projeto é usado.
+this will replace a placeholder string in all files where the project ID is used.
 
-3. Baixe e instale o Cloud SDK, instruções [aqui](https://cloud.google.com/sdk/docs/install).
-4. Configure a autenticação do GCP, instruções [aqui](https://cloud.google.com/docs/authentication/getting-started).
+3. Download and Install Cloud SDK, Instructions [here](https://cloud.google.com/sdk/docs/install).
+4. Configure GCP authentication, instructions [here](https://cloud.google.com/docs/authentication/getting-started).
 
-###### Configuração do Terraform
+###### Terraform configuration
 
-1. Baixe e instale o Terraform, instruções [aqui](https://learn.hashicorp.com/tutorials/terraform/install-cli).
-2. Execute:
+1. Download and install Terraform, instructions [here](https://learn.hashicorp.com/tutorials/terraform/install-cli).
+2. run:
 ```bash
 scripts/setup_terraform_backend.sh
 ```
-que criará o intervalo de armazenamento que serve como back-end para armazenar o estado do Terraform.
+which will create the storage range that serves as the back end to store the Terraform state.
 
-3. No diretório __terraform__ , execute:
+3. in the directory __terraform__ , run:
 
 ```bash
 terraform init && terraform apply
 ```
-e digite __yes__ quando solicitado. Aguarde a conclusão do processo, o que pode levar até 40 minutos.
+and type __yes__ when solicited. Wait for the process to complete, which can take up to 40 minutes.
 
 ###### Dataproc Workflow Template
-1. Da pasta raiz, execute:
+
+1. From the root folder, run:
 ```bash
 scripts/deploy_workflow_template.sh
 ```
-para copiar o arquivo python para o GCS e importar o modelo de fluxo de trabalho. Depois disso, o modelo está pronto para ser usado no projeto.
+to copy the python file to GCS and import the workflow template. After that, the template is ready to be used in the project.
 
-###### Implantar DAG
-1. Na pasta composer, se encontra o arquivo da DAG, faça o upload para a sua pasta de DAGs no Cloud Composer.
+###### Deploy DAG
+1. In the composer folder, you can find the DAG file, upload it to your DAGs folder in Cloud Composer.
 
-2. Da pasta raiz, execute:
+2. From the root folder, run:
 
 ```bash
 scripts/upload_files.sh
 ```
-que irá fazer o upload dos arquivo no bucket, para processamento. 
-obs: (Nesse caso irá fazer o upload apenas do arquivo wordcount.txt, pois o git não sobe arquivos pesados, será necessário fazer o upload do arquivo para a pasta, localmente, antes de executar o script bash).
+which will upload the files to the bucket for processing.
+obs: (In this case you will only upload the wordcount.txt file, as git does not upload heavy files, you will need to upload the file to the folder, locally, before running the bash script).
 
 
